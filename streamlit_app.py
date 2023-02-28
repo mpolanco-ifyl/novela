@@ -20,12 +20,9 @@ def main():
 
     # Establecemos los valores de longitud de palabras para cada tipo de contenido
     word_counts = {
-        "blog": 1000,
-        "libro electrónico": 3000,
-        "relato corto": 10000,
-        "libro infantil": 40000,
-        "novela romántica": 40000
-    }
+        "mini relato": 1000,
+        "capítulo de novela": 3000,
+            }
 
     # Preguntamos al usuario la consulta inicial
     st.write("Bienvenido al generador de contenido en español. ¿Qué tipo de contenido puedo escribir para ti hoy?")
