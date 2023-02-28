@@ -66,7 +66,7 @@ def main():
         prompt += synopsis
 
         # Añadimos la información adicional al prompt
-        prompt += f"Para el tipo de contenido '{content_type}', escribirás sobre ‘{keywords}’ en un estilo {mood} y {tone}. "
+        prompt += f"Para el tipo de contenido '{content_type}', escribirás sobre '{keywords}' en un estilo {mood} y {tone}. "
 
     # Añadimos información sobre los personajes, si es necesario
     if has_characters == "Sí":
