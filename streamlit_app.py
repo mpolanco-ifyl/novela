@@ -19,7 +19,7 @@ def generar_cuento(trama, autor, incluir_dialogos):
         prompt += "\n\nAsegúrate de incluir algunos diálogos en la historia."
 
     temperatura = random.uniform(0.7, 1.2)  # Ajuste de temperatura
-    max_tokens = 4096  # Ajuste de max_tokens
+    max_tokens = 3896  # Ajuste de max_tokens
 
     # Se genera el texto con el modelo GPT-3 de OpenAI
     completions = openai.Completion.create(
