@@ -1,9 +1,10 @@
 import streamlit as st
 import openai
 import re
+import os
 
-# Pide la clave de API de OpenAI al usuario
-openai.api_key = st.text_input("Introduce tu clave de API de OpenAI:")
+# Inicializa el modelo GPT-3
+openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 # Función para contar palabras
 def count_words(text):
