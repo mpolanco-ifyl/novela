@@ -12,11 +12,13 @@ def count_words(text):
 
 # Función principal de la aplicación
 def main():
-    st.title("Generador de escenas de novela")
+    st.title("Generador de escena de novela en español")
 
-    # Pedimos los detalles de la escena al usuario
-    st.write("Bienvenido al generador de escenas de novela.")
-    scene_synopsis = st.text_area("Escribe una breve sinopsis de la escena que quieres generar:")
+    # Preguntamos al usuario la consulta inicial
+    st.write("Bienvenido al generador de escena de novela en español. ¿Qué tipo de escena te gustaría crear?")
+
+    # Pedimos una sinopsis de la escena
+    scene_synopsis = st.text_area("Escribe una breve sinopsis de la escena que quieres crear:")
 
     # Preguntamos por los personajes, si es necesario
     has_characters = st.radio("¿La escena incluye personajes?", ["Sí", "No"])
@@ -28,39 +30,37 @@ def main():
         character_roles = []
         character_personalities = []
         for i in range(character_count):
-            name = st.text_input(f"Nombre del personaje #{i+1}")
-            role = st.text_input(f"Papel del personaje #{i+1}")
-            personality = st.text_area(f"Personalidad de {name}")
+            name = st.text_input(f"Nombre del personaje #{i+1}", key=f"name_{i}")
+            role = st.text_input(f"Papel del personaje #{i+1}", key=f"role_{i}")
+            personality = st.text_area(f"Personalidad de {name}:", key=f"personality_{i}")
             character_names.append(name)
             character_roles.append(role)
             character_personalities.append(personality)
 
-    # Preguntamos por el estilo o autor que se desea imitar
-    style = st.text_input("¿Qué estilo o autor te gustaría imitar en esta escena?")
+        # Preguntamos si hay diálogos en la escena
+        has_dialogue = st.radio("¿La escena incluye diálogo?", ["Sí", "No"])
 
-    # Preguntamos si la escena incluye diálogos
-    has_dialogue = st.radio("¿La escena incluye diálogos?", ["Sí", "No"])
+        # Preguntamos si se desea imitar un estilo o autor específico
+        has_style = st.radio("¿Te gustaría imitar un estilo o autor específico?", ["Sí", "No"])
+        if has_style == "Sí":
+            style = st.text_input("¿Qué estilo o autor te gustaría imitar?")
 
-    # Generamos la escena con GPT-3
-    if st.button("Generar escena"):
-        prompt = f"Genera una escena de novela. {scene_synopsis} "
-        if has_characters == "Sí":
-            prompt += "Los personajes en esta escena son: "
-            for i in range(character_count):
-                prompt += f"{character_names[i]}, que es {character_roles[i]}. "
-                prompt += f"{character_names[i]} es {character_personalities[i]}. "
-        prompt += f"Imita el estilo de {style}. La escena{' incluye' if has_dialogue == 'Sí' else ' no incluye'} diálogos. "
-
+        # Generamos la escena con GPT-3
         response = openai.Completion.create(
             engine="text-davinci-003",
-            prompt=prompt,
-            max_tokens=1024,
+            prompt=f"Genera una escena de novela que {scene_synopsis}.",
+            max_tokens=3024,
             n=1,
             stop=None,
             temperature=0.7,
         )
 
+        # Mostramos el resultado al usuario
         st.write(response.choices[0].text)
+
+    # Mostramos el botón de reiniciar para que el usuario pueda volver a empezar
+    if st.button("Reiniciar"):
+        st.experimental_rerun()
 
 if __name__ == "__main__":
     main()
