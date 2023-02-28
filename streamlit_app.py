@@ -6,7 +6,7 @@ import random
 openai.api_key = st.text_input("Introduce tu clave de API de OpenAI:")
 
 # Lista de autores españoles
-autores_espanoles = ["Miguel de Cervantes", "Lope de Vega", "Federico García Lorca", "Gabriel García Márquez", "Jorge Luis Borges", "Isabel Allende", "Mario Vargas Llosa", "Octavio Paz", "Pablo Neruda", "Gustavo Adolfo Bécquer", "Juan Ramón Jiménez", "Antonio Machado", "Rosalía de Castro", "José Martí", "Rubén Darío", "Leopoldo Alas Clarín", "Emilia Pardo Bazán", "Ramón del Valle-Inclán", "Benito Pérez Galdós", "Fernán Caballero"]
+autores_espanoles = ["Javier Marías", "Carlos Ruiz Zafón", "Arturo Pérez-Reverte", "Almudena Grandes", "Juan José Millás", "María Dueñas", "Javier Cercas", "Rosa Montero", "Eduardo Mendoza", "Luis Landero"]
 
 # Se define la función para generar el cuento
 def generar_cuento(trama, autor):
@@ -14,7 +14,7 @@ def generar_cuento(trama, autor):
     prompt = (f"Escribe un cuento que comience con la siguiente trama: {trama}\n\n"
               f"Imita el estilo de escritura de {autor}.")
     temperatura = random.uniform(0.5, 1.2)
-    max_tokens = 3024
+    max_tokens = 3824
 
     # Se genera el texto con el modelo GPT-3 de OpenAI
     completions = openai.Completion.create(
