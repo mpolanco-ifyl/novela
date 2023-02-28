@@ -36,7 +36,7 @@ def main():
     
     if response.choices:
         story_prompt = f"{response.choices[0].text}\n\nUna vez que {character_names[0]} {character_roles[0]}, {character_names[1]} {character_roles[1]}. "
-        else:
+    else:
     # Manejar el caso en el que no hay respuesta del modelo
 
 
