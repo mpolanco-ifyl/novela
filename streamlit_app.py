@@ -47,7 +47,7 @@ story_response = openai.Completion.create(
     temperature=0.7,
 )
 # Resto del código...
-else:
+    else:
     st.write("Lo siento, no pude generar una historia con la información proporcionada.")
 
 
