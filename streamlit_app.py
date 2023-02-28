@@ -5,57 +5,49 @@ import re
 # Pide la clave de API de OpenAI al usuario
 openai.api_key = st.text_input("Introduce tu clave de API de OpenAI:")
 
-# Función para contar palabras
-def count_words(text):
-    words = re.findall(r'\w+', text)
-    return len(words)
+# Lista de autores españoles
+autores_espanoles = ["Miguel de Cervantes", "Lope de Vega", "Federico García Lorca", "Gabriel García Márquez", "Jorge Luis Borges", "Isabel Allende", "Mario Vargas Llosa", "Octavio Paz", "Pablo Neruda", "Gustavo Adolfo Bécquer", "Juan Ramón Jiménez", "Antonio Machado", "Rosalía de Castro", "José Martí", "Rubén Darío", "Leopoldo Alas Clarín", "Emilia Pardo Bazán", "Ramón del Valle-Inclán", "Benito Pérez Galdós", "Fernán Caballero"]
 
-# Función principal de la aplicación
+# Se define la función para generar el cuento
+def generar_cuento(trama, autor):
+    # Se establecen los parámetros para la generación del texto
+    prompt = (f"Escribe un cuento que comience con la siguiente trama: {trama}\n\n"
+              f"Imita el estilo de escritura de {autor}.")
+    temperatura = random.uniform(0.5, 1.2)
+    max_tokens = 3024
+
+    # Se genera el texto con el modelo GPT-3 de OpenAI
+    completions = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=prompt,
+        max_tokens=max_tokens,
+        n=1,
+        temperature=temperatura
+    )
+
+    # Se devuelve el texto generado
+    return completions.choices[0].text
+
+# Se define la app de Streamlit
 def main():
-    st.title("Generador de cuentos")
+    # Título de la app
+    st.title("Generador de cuentos con OpenAI")
 
-    # Preguntamos al usuario por la sinopsis del cuento
-    prompt = st.text_area("Introduce la sinopsis del cuento que quieres generar:")
+    # Descripción de la app
+    st.write("Esta aplicación genera un cuento a partir de una trama dada, imitando el estilo de escritura de un autor español seleccionado por el usuario.")
 
-    # Preguntamos por detalles específicos sobre la trama y los personajes
-    genre = st.text_input("¿Qué género o temática te gustaría que tuviera el cuento?")
-    character_count = st.number_input("¿Cuántos personajes hay en el cuento?", min_value=1, max_value=10, step=1)
-    character_names = []
-    character_roles = []
-    character_personalities = []
-    for i in range(character_count):
-        name = st.text_input(f"Nombre del personaje #{i+1}")
-        role = st.text_input(f"Papel del personaje #{i+1}")
-        personality = st.text_area(f"Personalidad de {name}:")
-        character_names.append(name)
-        character_roles.append(role)
-        character_personalities.append(personality)
+    # Input de la trama
+    trama = st.text_input("Introduce la trama del cuento:")
 
-    # Preguntamos por el estilo o autor que se desea imitar y si hay diálogos
-    style = st.text_input("¿Qué estilo o autor te gustaría imitar?")
-    has_dialogue = st.radio("¿Incluye la escena algún diálogo?", ["Sí", "No"])
+    # Input del autor
+    autor = st.selectbox("Selecciona el autor a imitar:", autores_espanoles)
 
-    # Generamos el cuento con GPT-3
+    # Se genera el cuento
     if st.button("Generar cuento"):
-        if len(response.choices) > 0:
-            story_prompt = f"{response.choices[0].text}\n\nUna vez que {character_names[0]} {character_roles[0]}, {character_names[1]} {character_roles[1]}. "
-            if has_dialogue == "Sí":
-                story_prompt += f"\"{st.text_input('Escribe una línea de diálogo:')}\" dijo {character_names[2]}."
-            story_response = openai.Completion.create(
-                engine="text-davinci-003",
-                prompt=story_prompt,
-                max_tokens=1600,
-                n=1,
-                stop=None,
-                temperature=0.7,
-            )
-            # Mostramos el resultado final al usuario
-            words = count_words(story_response.choices[0].text)
-            st.write(f"Tu historia tiene {words} palabras:")
-            st.write(story_response.choices[0].text)
-        else:
-            st.write("Lo siento, no se pudo generar la historia. Por favor intenta con otra sinopsis o revisa la información que proporcionaste.")
+        cuento = generar_cuento(trama, autor)
+        st.write("Aquí está tu cuento:")
+        st.write(cuento)
 
-
+# Se ejecuta la app
 if __name__ == "__main__":
     main()
