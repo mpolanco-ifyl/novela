@@ -96,4 +96,4 @@ def main():
 # Mostramos el botón de reiniciar para que el usuario pueda volver a empezar
 if st.button("Reiniciar"):
     st.experimental_rerun()
-if name == “main”: main()
+if name == "main": main()
