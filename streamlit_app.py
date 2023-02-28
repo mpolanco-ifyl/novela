@@ -46,9 +46,6 @@ story_response = openai.Completion.create(
     stop=None,
     temperature=0.7,
 )
-# Resto del código...
-    else:
-    st.write("Lo siento, no pude generar una historia con la información proporcionada.")
 
 
     # Convertimos la escena en un cuento y mostramos el resultado
