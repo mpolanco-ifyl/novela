@@ -20,15 +20,15 @@ def main():
 
     # Establecemos los valores de longitud de palabras para cada tipo de contenido
     word_counts = {
-        "mini relato": 1000,
-        "capítulo de novela": 3000,
+        "relato corto": 800,
+        "escena de novela": 1600,
             }
 
     # Preguntamos al usuario la consulta inicial
     st.write("Bienvenido al generador de contenido en español. ¿Qué tipo de contenido puedo escribir para ti hoy?")
 
     # Opciones de tipo de contenido
-    content_type = st.selectbox("Selecciona el tipo de contenido", ["blog", "libro electrónico", "relato corto", "libro infantil", "novela romántica"])
+    content_type = st.selectbox("Selecciona el tipo de contenido", ["relato corto", "escena de novela"])
 
     # Pedimos palabras clave y temas adicionales
     keywords = st.text_input("Escribe algunas palabras clave o temas que te gustaría incluir en el contenido")
