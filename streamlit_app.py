@@ -51,12 +51,10 @@ def main():
 
         # Convertimos la escena en un cuento y mostramos el resultado
         story_prompt = f"{response.choices[0].text}\n\nUna vez que {character_names[0]} {character_roles[0]}, {character_names[1]} {character_roles[1]}. "
-        if has_dialogue == "Sí":
-            story_prompt += f"\"{st.text_input('Escribe una línea de diálogo:')}\" dijo {character_names[2]}."
         story_response = openai.Completion.create(
             engine="text-davinci-003",
             prompt=story_prompt,
-            max_tokens=1600,
+            max_tokens=3600,
             n=1,
             stop=None,
             temperature=0.7,
