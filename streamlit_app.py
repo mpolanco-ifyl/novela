@@ -13,13 +13,13 @@ def generar_cuento(trama, autor, incluir_dialogos):
     # Se establecen los parámetros para la generación del texto
     prompt = (f"Escribe un cuento que comience con la siguiente trama: {trama}\n\n"
               f"Imita el estilo de escritura de {autor}.")
-    
+
     # Si el usuario ha indicado que quiere incluir diálogos, se agrega esta frase a la prompt
     if incluir_dialogos:
         prompt += "\n\nAsegúrate de incluir algunos diálogos en la historia."
 
-    temperatura = random.uniform(0.5, 1.2)
-    max_tokens = 3824
+    temperatura = random.uniform(0.7, 1.2)  # Ajuste de temperatura
+    max_tokens = 4096  # Ajuste de max_tokens
 
     # Se genera el texto con el modelo GPT-3 de OpenAI
     completions = openai.Completion.create(
