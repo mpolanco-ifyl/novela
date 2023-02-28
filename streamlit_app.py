@@ -12,58 +12,55 @@ def count_words(text):
 
 # Función principal de la aplicación
 def main():
-    st.title("Generador de escenas de novela en español")
+    st.title("Generador de escenas de novela")
 
-    # Preguntamos al usuario por la sinopsis de la escena
-    st.write("Escribe una sinopsis de la escena que te gustaría generar:")
-    prompt = st.text_area("Sinopsis:")
+    # Pedimos los detalles de la escena al usuario
+    st.write("Bienvenido al generador de escenas de novela.")
+    scene_synopsis = st.text_area("Escribe una breve sinopsis de la escena que quieres generar:")
 
-    # Preguntamos por los personajes
-    character_count = st.number_input("¿Cuántos personajes hay en la escena?", min_value=1, max_value=10, step=1)
-    character_names = []
-    character_roles = []
-    character_personalities = []
-    for i in range(character_count):
-        name = st.text_input(f"Nombre del personaje #{i+1}")
-        role = st.text_input(f"Papel del personaje #{i+1}")
-        personality = st.text_area(f"Personalidad de {name}:")
-        character_names.append(name)
-        character_roles.append(role)
-        character_personalities.append(personality)
+    # Preguntamos por los personajes, si es necesario
+    has_characters = st.radio("¿La escena incluye personajes?", ["Sí", "No"])
+    if has_characters == "Sí":
+        character_count = st.number_input("¿Cuántos personajes hay en la escena?", min_value=1, max_value=10, step=1)
+
+        # Preguntamos por los nombres, roles y personalidades de cada personaje
+        character_names = []
+        character_roles = []
+        character_personalities = []
+        for i in range(character_count):
+            name = st.text_input(f"Nombre del personaje #{i+1}")
+            role = st.text_input(f"Papel del personaje #{i+1}")
+            personality = st.text_area(f"Personalidad de {name}")
+            character_names.append(name)
+            character_roles.append(role)
+            character_personalities.append(personality)
 
     # Preguntamos por el estilo o autor que se desea imitar
-    author_style = st.text_input("¿Qué estilo o autor te gustaría imitar? (opcional)")
+    style = st.text_input("¿Qué estilo o autor te gustaría imitar en esta escena?")
 
-    # Preguntamos si hay diálogos
-    has_dialogue = st.radio("¿Incluye diálogos la escena?", ["Sí", "No"])
+    # Preguntamos si la escena incluye diálogos
+    has_dialogue = st.radio("¿La escena incluye diálogos?", ["Sí", "No"])
 
-    # Generamos la escena al presionar el botón
+    # Generamos la escena con GPT-3
     if st.button("Generar escena"):
-        prompt += f"\n\nPersonajes: {', '.join(character_names)}"
-        for i in range(character_count):
-            prompt += f"\n\n{character_names[i]} es {character_roles[i]} y tiene una personalidad {character_personalities[i]}."
-        if has_dialogue == "Sí":
-            prompt += "\n\nDiálogo: [Inserta aquí el diálogo de la escena]"
-        if author_style:
-            prompt += f"\n\nEstilo o autor a imitar: {author_style}"
+        prompt = f"Genera una escena de novela. {scene_synopsis} "
+        if has_characters == "Sí":
+            prompt += "Los personajes en esta escena son: "
+            for i in range(character_count):
+                prompt += f"{character_names[i]}, que es {character_roles[i]}. "
+                prompt += f"{character_names[i]} es {character_personalities[i]}. "
+        prompt += f"Imita el estilo de {style}. La escena{' incluye' if has_dialogue == 'Sí' else ' no incluye'} diálogos. "
 
-        # Generamos la escena con GPT-3
         response = openai.Completion.create(
             engine="text-davinci-003",
             prompt=prompt,
-            max_tokens=3048,
+            max_tokens=1024,
             n=1,
             stop=None,
             temperature=0.7,
         )
 
-        # Contamos las palabras en la respuesta y la mostramos al usuario
-        words = count_words(response.choices[0].text)
         st.write(response.choices[0].text)
-
-    # Mostramos el botón de reiniciar para que el usuario pueda volver a empezar
-    if st.button("Reiniciar"):
-        st.experimental_rerun()
 
 if __name__ == "__main__":
     main()
