@@ -2,6 +2,9 @@ import streamlit as st
 import openai
 import re
 
+# Pide la clave de API de OpenAI al usuario
+openai.api_key = st.text_input("Introduce tu clave de API de OpenAI:")
+
 # Función para contar palabras
 def count_words(text):
     words = re.findall(r'\w+', text)
@@ -14,9 +17,6 @@ def double_length(text):
 # Función principal de la aplicación
 def main():
     st.title("Generador de contenido en español")
-
-    # Aquí deberás poner tu propia API key de OpenAI
-    openai.api_key = "INSERTA_TU_API_KEY_AQUI"
 
     # Establecemos los valores de longitud de palabras para cada tipo de contenido
     word_counts = {
