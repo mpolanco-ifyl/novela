@@ -64,10 +64,11 @@ def main():
             )
             # Mostramos el resultado final al usuario
             words = count_words(story_response.choices[0].text)
-            st.write(f"Tu historia tiene {words} palabras:")
-            st.write(story_response.choices[0].text)
-        else:
-            st.write("Lo siento, no se pudo generar la historia. Por favor intenta con otra sinopsis o revisa la información que proporcionaste.")
-if __name__ == "__main__":
+            if words >= 1600:
+                st.write(f"Tu historia tiene {words} palabras:")
+                st.write(story_response.choices[0].text)
+            else:
+                st.write("Lo siento, no se pudo generar una historia con al menos 1600 palabras. Por favor intenta con otra sinopsis.")
+    if __name__ == "__main__":
     main()
 
