@@ -9,10 +9,15 @@ openai.api_key = st.text_input("Introduce tu clave de API de OpenAI:")
 autores_espanoles = ["Javier Marías", "Carlos Ruiz Zafón", "Arturo Pérez-Reverte", "Almudena Grandes", "Juan José Millás", "María Dueñas", "Javier Cercas", "Rosa Montero", "Eduardo Mendoza", "Luis Landero"]
 
 # Se define la función para generar el cuento
-def generar_cuento(trama, autor):
+def generar_cuento(trama, autor, incluir_dialogos):
     # Se establecen los parámetros para la generación del texto
     prompt = (f"Escribe un cuento que comience con la siguiente trama: {trama}\n\n"
               f"Imita el estilo de escritura de {autor}.")
+    
+    # Si el usuario ha indicado que quiere incluir diálogos, se agrega esta frase a la prompt
+    if incluir_dialogos:
+        prompt += "\n\nAsegúrate de incluir algunos diálogos en la historia."
+
     temperatura = random.uniform(0.5, 1.2)
     max_tokens = 3624
 
@@ -42,12 +47,15 @@ def main():
     # Input del autor
     autor = st.selectbox("Selecciona el autor a imitar:", autores_espanoles)
 
+    # Input para incluir diálogos
+    incluir_dialogos = st.radio("¿Quieres incluir diálogos en la historia?", options=["Sí", "No"])
+
     # Se genera el cuento
     if st.button("Generar cuento"):
-        cuento = generar_cuento(trama, autor)
+        cuento = generar_cuento(trama, autor, incluir_dialogos == "Sí")
         st.write("Aquí está tu cuento:")
         st.write(cuento)
 
 # Se ejecuta la app
 if __name__ == "__main__":
-    main() 
+    main()
