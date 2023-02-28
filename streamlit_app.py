@@ -12,55 +12,55 @@ def count_words(text):
 
 # Función principal de la aplicación
 def main():
-    st.title("Generador de escena de novela en español")
+    st.title("Generador de cuentos")
 
-    # Preguntamos al usuario la consulta inicial
-    st.write("Bienvenido al generador de escena de novela en español. ¿Qué tipo de escena te gustaría crear?")
+    # Preguntamos al usuario por la sinopsis de la escena
+    prompt = st.text_area("Introduce la sinopsis del cuento que quieres generar:")
 
-    # Pedimos una sinopsis de la escena
-    scene_synopsis = st.text_area("Escribe una breve sinopsis de la escena que quieres crear:")
+    # Preguntamos por los personajes y su personalidad
+    character_count = st.number_input("¿Cuántos personajes hay en el cuento?", min_value=1, max_value=10, step=1)
+    character_names = []
+    character_roles = []
+    character_personalities = []
+    for i in range(character_count):
+        name = st.text_input(f"Nombre del personaje #{i+1}")
+        role = st.text_input(f"Papel del personaje #{i+1}")
+        personality = st.text_area(f"Personalidad de {name}:")
+        character_names.append(name)
+        character_roles.append(role)
+        character_personalities.append(personality)
 
-    # Preguntamos por los personajes, si es necesario
-    has_characters = st.radio("¿La escena incluye personajes?", ["Sí", "No"])
-    if has_characters == "Sí":
-        character_count = st.number_input("¿Cuántos personajes hay en la escena?", min_value=1, max_value=10, step=1)
+    # Preguntamos por el estilo o autor que se desea imitar y si hay diálogos
+    style = st.text_input("¿Qué estilo o autor te gustaría imitar?")
+    has_dialogue = st.radio("¿Incluye la escena algún diálogo?", ["Sí", "No"])
 
-        # Preguntamos por los nombres, roles y personalidades de cada personaje
-        character_names = []
-        character_roles = []
-        character_personalities = []
-        for i in range(character_count):
-            name = st.text_input(f"Nombre del personaje #{i+1}", key=f"name_{i}")
-            role = st.text_input(f"Papel del personaje #{i+1}", key=f"role_{i}")
-            personality = st.text_area(f"Personalidad de {name}:", key=f"personality_{i}")
-            character_names.append(name)
-            character_roles.append(role)
-            character_personalities.append(personality)
+    # Generamos el cuento con GPT-3
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=prompt,
+        max_tokens=3600,
+        n=1,
+        stop=None,
+        temperature=0.7,
+    )
 
-        # Preguntamos si hay diálogos en la escena
-        has_dialogue = st.radio("¿La escena incluye diálogo?", ["Sí", "No"])
+    # Convertimos la escena en un cuento y mostramos el resultado
+    story_prompt = f"{response.choices[0].text}\n\nUna vez que {character_names[0]} {character_roles[0]}, {character_names[1]} {character_roles[1]}. "
+    if has_dialogue == "Sí":
+        story_prompt += f"\"{st.text_input('Escribe una línea de diálogo:')}\" dijo {character_names[2]}."
+    story_response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=story_prompt,
+        max_tokens=1600,
+        n=1,
+        stop=None,
+        temperature=0.7,
+    )
 
-        # Preguntamos si se desea imitar un estilo o autor específico
-        has_style = st.radio("¿Te gustaría imitar un estilo o autor específico?", ["Sí", "No"])
-        if has_style == "Sí":
-            style = st.text_input("¿Qué estilo o autor te gustaría imitar?")
-
-        # Generamos la escena con GPT-3
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=f"Genera una escena de novela que {scene_synopsis}.",
-            max_tokens=3024,
-            n=1,
-            stop=None,
-            temperature=0.7,
-        )
-
-        # Mostramos el resultado al usuario
-        st.write(response.choices[0].text)
-
-    # Mostramos el botón de reiniciar para que el usuario pueda volver a empezar
-    if st.button("Reiniciar"):
-        st.experimental_rerun()
+    # Mostramos el resultado final al usuario
+    words = count_words(story_response.choices[0].text)
+    st.write(f"Tu historia tiene {words} palabras:")
+    st.write(story_response.choices[0].text)
 
 if __name__ == "__main__":
     main()
