@@ -1,6 +1,6 @@
 import streamlit as st
 import openai
-import re
+import random
 
 # Pide la clave de API de OpenAI al usuario
 openai.api_key = st.text_input("Introduce tu clave de API de OpenAI:")
