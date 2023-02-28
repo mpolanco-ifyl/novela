@@ -64,7 +64,7 @@ def main():
             )
             # Mostramos el resultado final al usuario
             words = count_words(story_response.choices[0].text)
-            if words >= 1600:
+            if words >= 800:
                 st.write(f"Tu historia tiene {words} palabras:")
                 st.write(story_response.choices[0].text)
             else:
