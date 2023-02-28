@@ -71,5 +71,5 @@ def main():
                 st.write("Lo siento, no se pudo generar una historia con al menos 1600 palabras. Por favor intenta con otra sinopsis.")
  
 if __name__ == "__main__":
-main()
+    main()
 
