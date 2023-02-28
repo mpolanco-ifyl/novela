@@ -14,7 +14,7 @@ def generar_cuento(trama, autor):
     prompt = (f"Escribe un cuento que comience con la siguiente trama: {trama}\n\n"
               f"Imita el estilo de escritura de {autor}.")
     temperatura = random.uniform(0.5, 1.2)
-    max_tokens = 3824
+    max_tokens = 3624
 
     # Se genera el texto con el modelo GPT-3 de OpenAI
     completions = openai.Completion.create(
