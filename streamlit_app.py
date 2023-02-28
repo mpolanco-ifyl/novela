@@ -68,4 +68,6 @@ def main():
             st.write(story_response.choices[0].text)
         else:
             st.write("Lo siento, no se pudo generar la historia. Por favor intenta con otra sinopsis o revisa la información que proporcionaste.")
+if __name__ == "__main__":
+    main()
 
