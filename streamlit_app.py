@@ -41,14 +41,14 @@ def main():
 
 
     # Generamos el cuento con GPT-3
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
-        max_tokens=3600,
-        n=1,
-        stop=None,
-        temperature=0.7,
-    )
+        response = openai.Completion.create(
+            engine="text-davinci-003",
+            prompt=prompt,
+            max_tokens=3600,
+            n=1,
+            stop=None,
+            temperature=0.7,
+        )
 
     # Convertimos la escena en un cuento y mostramos el resultado
     story_prompt = f"{response.choices[0].text}\n\nUna vez que {character_names[0]} {character_roles[0]}, {character_names[1]} {character_roles[1]}. "
