@@ -37,24 +37,24 @@ def main():
 
     # Generamos el cuento con GPT-3
     if st.button("Generar cuento"):
-    if len(response.choices) > 0:
-        story_prompt = f"{response.choices[0].text}\n\nUna vez que {character_names[0]} {character_roles[0]}, {character_names[1]} {character_roles[1]}. "
-        if has_dialogue == "Sí":
-            story_prompt += f"\"{st.text_input('Escribe una línea de diálogo:')}\" dijo {character_names[2]}."
-        story_response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=story_prompt,
-            max_tokens=1600,
-            n=1,
-            stop=None,
-            temperature=0.7,
-        )
-        # Mostramos el resultado final al usuario
-        words = count_words(story_response.choices[0].text)
-        st.write(f"Tu historia tiene {words} palabras:")
-        st.write(story_response.choices[0].text)
-    else:
-        st.write("Lo siento, no se pudo generar la historia. Por favor intenta con otra sinopsis o revisa la información que proporcionaste.")
+        if len(response.choices) > 0:
+            story_prompt = f"{response.choices[0].text}\n\nUna vez que {character_names[0]} {character_roles[0]}, {character_names[1]} {character_roles[1]}. "
+            if has_dialogue == "Sí":
+                story_prompt += f"\"{st.text_input('Escribe una línea de diálogo:')}\" dijo {character_names[2]}."
+            story_response = openai.Completion.create(
+                engine="text-davinci-003",
+                prompt=story_prompt,
+                max_tokens=1600,
+                n=1,
+                stop=None,
+                temperature=0.7,
+            )
+            # Mostramos el resultado final al usuario
+            words = count_words(story_response.choices[0].text)
+            st.write(f"Tu historia tiene {words} palabras:")
+            st.write(story_response.choices[0].text)
+        else:
+            st.write("Lo siento, no se pudo generar la historia. Por favor intenta con otra sinopsis o revisa la información que proporcionaste.")
 
 
 if __name__ == "__main__":
