@@ -12,68 +12,14 @@ def count_words(text):
 
 # Función principal de la aplicación
 def main():
-    st.title("Generador de contenido en español")
+    st.title("Generador de escena de novela en español")
 
-    # Establecemos los valores de longitud de palabras para cada tipo de contenido
-    word_counts = {
-        "escena de novela": 1600,
-    }
+    # Establecemos los valores de longitud de palabras para la escena de novela
+    word_count = 1600
 
-    # Preguntamos al usuario la consulta inicial
-    st.write("Bienvenido al generador de contenido en español. ¿Qué tipo de contenido puedo escribir para ti hoy?")
-
-    # Opciones de tipo de contenido
-    content_type = "escena de novela"
-
-    # Pedimos palabras clave y temas adicionales
-    keywords = st.text_input("Escribe algunas palabras clave o temas que te gustaría incluir en el contenido")
-
-    # Preguntamos por la longitud prevista del contenido
-    word_count = word_counts[content_type]
-    st.write(f"La longitud prevista del contenido es de {word_count} palabras.")
-
-    # Preguntamos por la sensación general y el tono del contenido
-    mood = st.text_input("¿Cuál es la sensación general que te gustaría transmitir en el contenido? (por ejemplo: misterioso, divertido, emocionante)")
-    tone = st.text_input("¿Cuál es el tono que te gustaría utilizar en el contenido? (por ejemplo: formal, informal, neutro)")
-
-    # Preguntamos por los personajes, si es necesario
-    has_characters = st.radio("¿El contenido incluye personajes?", ["Sí", "No"])
-    if has_characters == "Sí":
-        character_count = st.number_input("¿Cuántos personajes hay en el contenido?", min_value=1, max_value=10, step=1)
-
-        # Preguntamos por los nombres y roles de cada personaje
-        character_names = []
-        character_roles = []
-        for i in range(character_count):
-            name = st.text_input(f"Nombre del personaje #{i+1}")
-            role = st.text_input(f"Papel del personaje #{i+1}")
-            character_names.append(name)
-            character_roles.append(role)
-
-        # Describimos la personalidad de cada personaje
-        for i in range(character_count):
-            st.write(f"Personalidad de {character_names[i]}: ")
-            personality = st.text_area(f"Describe la personalidad de {character_names[i]} en pocas palabras.")
-
-    # Pedimos al usuario que escriba una sinopsis para la escena
-    st.write("Escribe a continuación una sinopsis de la escena que te gustaría generar:")
-
-    if st.button("Generar contenido"):
-        prompt = f"Su tarea consiste en actuar como escritor y autor profesional y redactar diversas formas de contenido. Todos los resultados deben estar en español. "
-
-        # Añadimos la sinopsis de la escena al prompt
-        synopsis = st.text_area("Escribe la sinopsis aquí:")
-        prompt += synopsis
-
-        # Añadimos la información adicional al prompt
-        prompt += f"Para el tipo de contenido '{content_type}', escribirás sobre '{keywords}' en un estilo {mood} y {tone}. "
-
-    # Añadimos información sobre los personajes, si es necesario
-    if has_characters == "Sí":
-        prompt += "Los personajes en esta historia son: "
-        for i in range(character_count):
-            prompt += f"{character_names[i]}, que es {character_roles[i]}. "
-            prompt += f"{character_names[i]} es {personality}. "
+    # Preguntamos al usuario por una sinopsis de la escena
+    st.write("Bienvenido al generador de escena de novela en español. Por favor, proporciona una breve sinopsis de la escena que te gustaría generar:")
+    prompt = st.text_area("Escribe la sinopsis aquí:")
 
     # Generamos el contenido con GPT-3
     response = openai.Completion.create(
@@ -88,12 +34,12 @@ def main():
     # Contamos las palabras en la respuesta y la mostramos al usuario
     words = count_words(response.choices[0].text)
     if words < word_count:
-        response.choices[0].text += " "
-        response.choices[0].text += response.choices[0].text
-        words = count_words(response.choices[0].text)
+        response.choices[0].text += " " * (word_count - words)
     st.write(response.choices[0].text)
 
-# Mostramos el botón de reiniciar para que el usuario pueda volver a empezar
-if st.button("Reiniciar"):
-    st.experimental_rerun()
-if name == "main": main()
+    # Mostramos el botón de reiniciar para que el usuario pueda volver a empezar
+    if st.button("Reiniciar"):
+        st.experimental_rerun()
+
+if __name__ == "__main__":
+    main()
