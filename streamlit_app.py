@@ -60,10 +60,10 @@ story_response = openai.Completion.create(
     temperature=0.7,
 )
 
-    # Mostramos el resultado final al usuario
-    words = count_words(story_response.choices[0].text)
-    st.write(f"Tu historia tiene {words} palabras:")
-    st.write(story_response.choices[0].text)
+# Mostramos el resultado final al usuario
+words = count_words(story_response.choices[0].text)
+st.write(f"Tu historia tiene {words} palabras:")
+st.write(story_response.choices[0].text)
 
 if __name__ == "__main__":
     main()
