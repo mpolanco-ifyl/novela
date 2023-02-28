@@ -30,9 +30,8 @@ def main():
         character_roles.append(role)
         character_personalities.append(personality)
 
-    # Preguntamos por el estilo o autor que se desea imitar y si hay diálogos
-    style = st.text_input("¿Qué estilo o autor te gustaría imitar?")
-    has_dialogue = st.radio("¿Incluye la escena algún diálogo?", ["Sí", "No"])
+    # Preguntamos por el género o temática del cuento
+    genre = st.selectbox("Selecciona el género o temática del cuento", ["Fantasía", "Ciencia ficción", "Romance", "Terror", "Misterio"])
 
     # Generamos el cuento con GPT-3
     response = openai.Completion.create(
@@ -46,8 +45,7 @@ def main():
 
     # Convertimos la escena en un cuento y mostramos el resultado
     story_prompt = f"{response.choices[0].text}\n\nUna vez que {character_names[0]} {character_roles[0]}, {character_names[1]} {character_roles[1]}. "
-    if has_dialogue == "Sí":
-        story_prompt += f"\"{st.text_input('Escribe una línea de diálogo:')}\" dijo {character_names[2]}."
+    story_prompt += f"El cuento es de {genre.lower()}."
     story_response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=story_prompt,
